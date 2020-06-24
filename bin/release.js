@@ -18,6 +18,17 @@ async function run(command, args) {
 }
 
 async function main() {
+  try {
+    await run('tsc');
+  } catch (e) {
+    try {
+      throw e;
+    } finally {
+      console.log('Program does not build! Check the output above.');
+      process.exit(1);
+    }
+  }
+
   const uncommitted = await run('git status --porcelain');
   if (uncommitted.trim()) {
     console.error('ERROR. Commit all files before releasing.');
