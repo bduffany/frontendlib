@@ -2,7 +2,8 @@ const { exec } = require('child_process');
 const { readFileSync } = require('fs');
 const { program } = require('commander');
 
-program.option('bump', 'Version to bump [major/minor/patch]');
+program.command('github <bump>').action(main);
+program.parse(process.argv);
 
 async function run(command, args) {
   console.log(`RUNNING: ${command}`);
@@ -17,11 +18,9 @@ async function run(command, args) {
   });
 }
 
-async function main() {
-  program.parse();
-
-  if (!program.bump) {
-    console.error('ERROR: version type not specified.');
+async function main(bump) {
+  if (!bump) {
+    console.error('ERROR: version bump type not specified.');
     process.exit(1);
   }
 
@@ -49,9 +48,9 @@ async function main() {
     .split('.')
     .map((value) => Number(value));
 
-  const newVersion = (program.bump === 'major'
+  const newVersion = (bump === 'major'
     ? [++major, 0, 0]
-    : program.bump === 'minor'
+    : bump === 'minor'
     ? [major, ++minor, 0]
     : [major, minor, ++patch]
   ).join('.');
@@ -69,5 +68,3 @@ async function main() {
     await run('git checkout master');
   }
 }
-
-main();
