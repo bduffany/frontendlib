@@ -73,6 +73,6 @@ async function main(bump) {
       `git add . && git commit -m "Release ${newVersion}" && git push --set-upstream origin ${newBranch}`
     );
   } finally {
-    await run('git checkout master');
+    await run('git checkout master && git reset --hard HEAD && yarn install');
   }
 }
