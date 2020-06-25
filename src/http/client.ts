@@ -29,7 +29,7 @@ export default class HttpClient {
         effectiveUrl.searchParams.append(key, value);
       });
     }
-    const optionalBody = body ? { body: JSON.stringify(body) } : { body: '' };
+    const optionalBody = body ? { body: JSON.stringify(body) } : {};
 
     const requestInfo = effectiveUrl.toString();
     const requestInit = { method, ...optionalBody, headers: headers_ };
