@@ -1,5 +1,5 @@
 import { api } from './client';
-import { useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import useAsync from '../../react/hooks/useAsync';
 
 /**
@@ -17,19 +17,25 @@ import useAsync from '../../react/hooks/useAsync';
  */
 export function useApiRequest(
   route: string,
-  { query }: { query?: Record<string, any>; throwErrors?: boolean } = {}
+  { query, enabled = true }: { query?: Record<string, any>; enabled?: boolean } = {}
 ) {
-  const request = useMemo(() => () => api.request(route, { query }), [
-    route,
-    query,
-  ]);
+  const [cacheBuster, setCacheBuster] = useState<number | null>(null);
+  const request = useMemo(
+    () => (!enabled || !route) ? null : () =>
+      api.request(route, {
+        query: query || {},
+      }),
+    [route, query, enabled]
+  );
   const { pending, value, error } = useAsync(request);
-
   useEffect(() => {
     if (error) {
       throw error;
     }
   }, [error]);
+  const refresh = useMemo(() => () => setCacheBuster(new Date().getTime()), [
+    setCacheBuster,
+  ]);
 
-  return { loading: pending, data: value?.data };
+  return { loading: pending, data: value?.data, refresh };
 }

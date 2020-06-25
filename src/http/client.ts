@@ -28,11 +28,16 @@ export default class HttpClient {
       query.forEach((value, key) => {
         effectiveUrl.searchParams.append(key, value);
       });
+    } else if (typeof query ==='object') {
+      for (const key of Object.keys(query)) {
+        effectiveUrl.searchParams.append(key, query[key]);
+      }
     }
     const optionalBody = body ? { body: JSON.stringify(body) } : {};
 
     const requestInfo = effectiveUrl.toString();
     const requestInit = { method, ...optionalBody, headers: headers_ };
+
     const response = await fetch(requestInfo, requestInit);
 
     if (response.status >= 400) {
