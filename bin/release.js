@@ -64,7 +64,7 @@ async function main(bump) {
     // TODO: base diff on previous commit
     await run(`git checkout --orphan ${newBranch}`);
     const keep = new Set(['.git', 'package.json', 'dist', 'LICENSE']);
-    for (const f of fs.readdirSync('.')) {
+    for (const f of readdirSync('.')) {
       if (keep.has(f)) continue;
       await run(`rm -rf ${f}`);
     }
