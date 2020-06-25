@@ -30,11 +30,17 @@ export class RequestProcessingPipelineBuilder<Req, Res> {
   toMiddleware(main: RequestProcessor<Req, Res>): RequestProcessor<Req, Res> {
     return async (req: Req, res: Res, next?: Function) => {
       const processors = [...this.before, main, ...this.after];
-
       for (const processor of processors) {
-        await runProcessor(processor, req, res);
+        try {
+          await runProcessor(processor, req, res);
+        } catch (e) {
+          if (next) {
+            next(e);
+          } else {
+            throw e;
+          }
+        }
       }
-
       if (next) next();
     };
   }
