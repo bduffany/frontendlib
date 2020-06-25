@@ -61,6 +61,7 @@ async function main(bump) {
   );
   await run(`git add . && git commit -m "Publish version ${newVersion}"`);
   try {
+    // TODO: base diff on previous commit
     await run(`git checkout --orphan ${newBranch}`);
     const keep = new Set(['.git', 'package.json', 'dist', 'LICENSE']);
     for (const f of fs.readdirSync('.')) {
