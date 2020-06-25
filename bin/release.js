@@ -1,5 +1,5 @@
 const { exec } = require('child_process');
-const { readFileSync } = require('fs');
+const { readFileSync, readdirSync } = require('fs');
 const { program } = require('commander');
 
 program.command('github <bump>').action(main);
@@ -59,10 +59,17 @@ async function main(bump) {
   await run(
     `perl -p -i -e 's@"version": "${currentVersion}"@"version": "${newVersion}"@' package.json`
   );
-  await run(`git add . && git commit -m "Publish dev version ${newVersion}"`);
+  await run(`git add . && git commit -m "Publish version ${newVersion}"`);
   try {
+    await run(`git checkout --orphan ${newBranch}`);
+    const keep = new Set(['.git', 'package.json', 'dist', 'LICENSE']);
+    for (const f of fs.readdirSync('.')) {
+      if (keep.has(f)) continue;
+      await run(`rm -rf ${f}`);
+    }
+    await run('mv -r dist/* . && rmdir dist');
     await run(
-      `git checkout --orphan ${newBranch} && git push --set-upstream origin ${newBranch}`
+      `git add . && git commit -m "Release ${newVersion}" && git push --set-upstream origin ${newBranch}`
     );
   } finally {
     await run('git checkout master');
