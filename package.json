@@ -8,7 +8,10 @@
     "src/"
   ],
   "scripts": {
-    "release": "node bin/release.js"
+    "release": "node bin/release.js",
+    "+": "node bin/release.js github patch",
+    "++": "node bin/release.js github minor",
+    "+++": "node bin/release.js github major"
   },
   "prettier": {
     "printWidth": 80,
