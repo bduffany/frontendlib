@@ -68,7 +68,7 @@ async function main(bump) {
       if (keep.has(f)) continue;
       await run(`rm -rf ${f}`);
     }
-    await run('mv -r dist/* . && rmdir dist');
+    await run('mv dist/* . && rmdir dist');
     await run(
       `git add . && git commit -m "Release ${newVersion}" && git push --set-upstream origin ${newBranch}`
     );
