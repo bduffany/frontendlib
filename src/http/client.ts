@@ -14,8 +14,8 @@ export default class HttpClient {
     { baseUrl, method, body, headers, query }: HttpRequestOptions = {}
   ) {
     const headers_ = {} as Record<string, any>;
-    for (const [key, value] of Object.entries(headers || {})) {
-      headers_[key.toLowerCase()] = value;
+    for (const key of Object.keys(headers || {})) {
+      headers_[key.toLowerCase()] = headers![key];
     }
     if (method === undefined && body) {
       method = 'POST';
@@ -75,9 +75,9 @@ export class HttpStatusError extends Error {
     public readonly response: Response
   ) {
     super(
-      `HttpStatusError: ${
-        response.status
-      } response from ${requestInit?.method || 'GET'} ${response.url}`
+      `HttpStatusError: ${response.status} response from ${
+        requestInit?.method || 'GET'
+      } ${response.url}`
     );
   }
 }

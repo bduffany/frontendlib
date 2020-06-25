@@ -14,7 +14,7 @@ export interface UnhandledError {
   clearError: () => void;
 }
 
-const ErrorContext = createContext<UnhandledError | null>(null);
+export const ErrorContext = createContext<UnhandledError | null>(null);
 
 /**
  * Error boundary that catches synchronously thrown exceptions as well as unhandled promise

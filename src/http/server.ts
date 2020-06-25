@@ -2,9 +2,14 @@
  * Server infrastructure for handling HTTP requests.
  */
 
-/** Function that processes a request. */
-type RequestProcessor<Req, Res> = (req: Req, res: Res, next?: Function) => any;
+/** Function that processes an HTTP request. */
+export type RequestProcessor<Req, Res> = (
+  req: Req,
+  res: Res,
+  next?: Function
+) => any;
 
+/** Builder for a request processing pipeline. */
 export class RequestProcessingPipelineBuilder<Req, Res> {
   private readonly before: RequestProcessor<Req, Res>[] = [];
   private readonly after: RequestProcessor<Req, Res>[] = [];
@@ -46,6 +51,12 @@ export class RequestProcessingPipelineBuilder<Req, Res> {
   }
 }
 
+/**
+ * Runs the given processor, returning a promise that resolves when
+ * the processor is finished running, and rejects if the processor
+ * encounters an internal error or explicitly calls "next" with an
+ * error object.
+ */
 export async function runProcessor<Req, Res>(
   processor: RequestProcessor<Req, Res>,
   req: Req,

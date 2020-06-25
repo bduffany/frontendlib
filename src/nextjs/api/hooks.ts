@@ -1,4 +1,4 @@
-import { nextApi } from './client';
+import { api } from './client';
 import { useMemo, useEffect } from 'react';
 import useAsync from '../../react/hooks/useAsync';
 
@@ -19,7 +19,7 @@ export function useApiRequest(
   route: string,
   { query }: { query?: Record<string, any>; throwErrors?: boolean } = {}
 ) {
-  const request = useMemo(() => () => nextApi.request(route, { query }), [
+  const request = useMemo(() => () => api.request(route, { query }), [
     route,
     query,
   ]);

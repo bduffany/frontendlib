@@ -62,7 +62,7 @@ async function main(bump) {
   await run(`git add . && git commit -m "Publish dev version ${newVersion}"`);
   try {
     await run(
-      `git checkout -b ${newBranch} && git push --set-upstream origin ${newBranch}`
+      `git checkout --orphan ${newBranch} && git push --set-upstream origin ${newBranch}`
     );
   } finally {
     await run('git checkout master');

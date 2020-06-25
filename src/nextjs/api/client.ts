@@ -21,4 +21,4 @@ export default class NextApiClient extends HttpClient {
   }
 }
 
-export const nextApi = new NextApiClient();
+export const api = new NextApiClient();
