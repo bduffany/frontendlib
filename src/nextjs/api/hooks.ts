@@ -17,14 +17,27 @@ import useAsync from '../../react/hooks/useAsync';
  */
 export function useApiRequest(
   route: string,
-  { query, enabled = true }: { query?: Record<string, any>; enabled?: boolean } = {}
+  {
+    query,
+    enabled = true,
+  }: { query?: Record<string, any>; enabled?: boolean } = {}
 ) {
   const [cacheBuster, setCacheBuster] = useState<number | null>(null);
+  const effectiveQuery = useMemo(
+    () => ({
+      ...(query || {}),
+      ...(cacheBuster ? { cacheBuster } : {}),
+    }),
+    [query, cacheBuster]
+  );
   const request = useMemo(
-    () => (!enabled || !route) ? null : () =>
-      api.request(route, {
-        query: query || {},
-      }),
+    () =>
+      !enabled || !route
+        ? null
+        : () =>
+            api.request(route, {
+              query: effectiveQuery,
+            }),
     [route, query, enabled]
   );
   const { pending, value, error } = useAsync(request);

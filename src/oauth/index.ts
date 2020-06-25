@@ -1,7 +1,5 @@
 import crypto from 'crypto';
 import OAuth from 'oauth-1.0a';
-import { request } from 'http';
-import { access } from 'fs';
 
 const HASH_FUNCTIONS = {
   ['HMAC-SHA1'](base_string: string, key: string) {
@@ -16,7 +14,6 @@ export function getOAuthFlow({
   accessTokenUrl,
   authorizationUrl,
   refreshTokenUrl,
-  callback = 'oob',
   signatureMethod = 'HMAC-SHA1',
 }: {
   consumerKey: string;
