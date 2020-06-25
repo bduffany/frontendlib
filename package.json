@@ -4,6 +4,9 @@
   "engines": {
     "node": ">=10"
   },
+  "files": [
+    "src/"
+  ],
   "scripts": {
     "release": "node bin/release.js"
   },
