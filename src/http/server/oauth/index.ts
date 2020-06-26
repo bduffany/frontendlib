@@ -18,7 +18,7 @@ export function oauthFlowMiddleware(
   // TODO: type
   providerConfigs: any
 ): RequestProcessor {
-  const middleware: RequestProcessor = (req, res, next = () => {}) => {
+  const middleware: RequestProcessor = (req, _, next = () => {}) => {
     requireQueryParams(['consumer_key', 'provider'], req);
     const { consumer_key, provider } = req.query;
     const config = providerConfigs[provider as string];

@@ -14,7 +14,7 @@ const DEFAULT_MESSAGES = {
  * being sent back to the client.
  */
 export class HttpStatusError extends Error {
-  public readonly responseContentType;
+  public readonly responseContentType: string;
 
   constructor(
     public code: number,

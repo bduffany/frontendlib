@@ -79,7 +79,7 @@ export class RequestProcessingPipelineBuilder<
       const processors = [...this.before, main, ...this.after];
       for (const processor of processors) {
         try {
-          const result = await runProcessor(processor, req, res);
+          await runProcessor(processor, req, res);
         } catch (e) {
           let handled = false;
           for (const handler of this.errorHandlers) {

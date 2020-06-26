@@ -23,7 +23,11 @@ async function main(bump) {
     console.error('ERROR: version bump type not specified.');
     process.exit(1);
   }
-
+  const uncommitted = await run('git status --porcelain');
+  if (uncommitted.trim()) {
+    console.error('ERROR. Commit all files before releasing.');
+    process.exit(1);
+  }
   try {
     await run('tsc');
   } catch (e) {
@@ -33,12 +37,6 @@ async function main(bump) {
       console.log('Program does not build! Check the output above.');
       process.exit(1);
     }
-  }
-
-  const uncommitted = await run('git status --porcelain');
-  if (uncommitted.trim()) {
-    console.error('ERROR. Commit all files before releasing.');
-    process.exit(1);
   }
   const packageJson = JSON.parse(
     readFileSync('package.json', { encoding: 'utf-8' })
