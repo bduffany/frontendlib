@@ -38,7 +38,7 @@ export function useApiRequest(
             api.request(route, {
               query: effectiveQuery,
             }),
-    [route, query, enabled]
+    [route, effectiveQuery, enabled]
   );
   const { pending, value, error } = useAsync(request);
   useEffect(() => {
@@ -46,9 +46,13 @@ export function useApiRequest(
       throw error;
     }
   }, [error]);
-  const refresh = useMemo(() => () => setCacheBuster(new Date().getTime()), [
-    setCacheBuster,
-  ]);
+  const refresh = useMemo(
+    () => () => {
+      console.log('Set cache buster.');
+      setCacheBuster(new Date().getTime());
+    },
+    [setCacheBuster]
+  );
 
   return { loading: pending, data: value?.data, refresh };
 }
