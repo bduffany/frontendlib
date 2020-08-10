@@ -20,7 +20,7 @@ export default class HttpClient {
     if (method === undefined && body) {
       method = 'POST';
     }
-    if (method === 'POST' && !(headers && !headers['content-type'])) {
+    if (method === 'POST' && !headers_['content-type']) {
       headers_['content-type'] = 'application/json';
     }
     const effectiveUrl = url instanceof URL ? url : new URL(url, baseUrl);
@@ -28,7 +28,7 @@ export default class HttpClient {
       query.forEach((value, key) => {
         effectiveUrl.searchParams.append(key, value);
       });
-    } else if (typeof query ==='object') {
+    } else if (typeof query === 'object') {
       for (const key of Object.keys(query)) {
         effectiveUrl.searchParams.append(key, query[key]);
       }
